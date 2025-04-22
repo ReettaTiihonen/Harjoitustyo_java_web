@@ -1,0 +1,74 @@
+.my-main-button {
+    background-color: lightgreen;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.my-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #D8B0FF;
+    margin-bottom: 20px;
+}
+
+.my-grid {
+    border: 2px solid #ddd;
+    padding: 10px;
+}
+.my-text-field {
+    font-size: 18px;  /* Larger font size */
+    font-weight: bold; /* Bold font */
+}
+
+/* Yläreunan taustaväri ja varjostus */
+.app-header {
+    background-color: #6200ea;  /* Tummempi violetti */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Käyttäjäprofiilin rooli */
+.user-menu .vaadin-avatar {
+    margin-right: 10px;
+}
+
+.user-menu .vaadin-menu-bar-item {
+    color: #6200ea;
+}
+
+/* Navigointipalkki */
+.custom-nav-style {
+    background-color: #6200ea;  /* Tummempi violetti taustaväri */
+    color: white;
+    border-radius: 8px;
+}
+
+.custom-nav-style .vaadin-side-nav-item {
+    color: white;
+}
+
+.custom-nav-style .vaadin-side-nav-item:hover {
+    background-color: #3700b3;
+    color: white;
+}
+.footer {
+    background-color: #6200ea; /* Dark purple color */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    position: fixed; /* Ensure it stays at the bottom */
+    bottom: 0;
+    width: 100%;
+}
+
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.app-layout > .footer {
+    margin-top: auto; /* Push footer to the bottom of the screen */
+}
+

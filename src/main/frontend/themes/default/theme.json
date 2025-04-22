@@ -5,5 +5,11 @@
     "spacing",
     "badge",
     "utility"
-  ]
+  ],
+  "css": [
+    "custom-styles.css"
+  ],
+  "color": {
+    "primary": "#4E342E"
+  }
 }
