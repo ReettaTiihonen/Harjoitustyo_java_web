@@ -6,9 +6,11 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.Menu;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
+import jakarta.annotation.security.RolesAllowed;
+import net.dancer.jump.base.ui.view.MainLayout;
 import net.dancer.jump.taskmanagement.domain.Person;
 import net.dancer.jump.taskmanagement.service.PersonService;
 
@@ -18,8 +20,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @CssImport("./themes/default/custom-styles.css")
+@Route(value = "person", layout = MainLayout.class)
 @Menu(order = 1, title = "Person")
-@Route("person")
+@RolesAllowed({"USER", "ADMIN"})
 public class PersonView extends VerticalLayout {
 
     private final PersonService personService;

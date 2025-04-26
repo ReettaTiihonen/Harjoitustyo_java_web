@@ -9,6 +9,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
+import jakarta.annotation.security.RolesAllowed;
+import net.dancer.jump.base.ui.view.MainLayout;
 import net.dancer.jump.taskmanagement.domain.Event;
 import net.dancer.jump.taskmanagement.domain.Participant;
 import net.dancer.jump.taskmanagement.service.EventService;
@@ -18,8 +20,9 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @CssImport("./themes/default/custom-styles.css")
+@Route(value = "event", layout = MainLayout.class)
 @Menu(order = 3, title = "Event")
-@Route("event")
+@RolesAllowed({"USER", "ADMIN"})
 public class EventView extends VerticalLayout {
 
     private final EventService eventService;

@@ -9,6 +9,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
+import jakarta.annotation.security.RolesAllowed;
+import net.dancer.jump.base.ui.view.MainLayout;
 import net.dancer.jump.taskmanagement.domain.Address;
 import net.dancer.jump.taskmanagement.service.AddressService;
 
@@ -17,8 +19,9 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @CssImport("./themes/default/custom-styles.css")
+@Route(value = "address", layout = MainLayout.class)
 @Menu(order = 2, title = "Address")
-@Route("address")
+@RolesAllowed({"USER", "ADMIN"})
 public class AddressView extends VerticalLayout {
 
     private final AddressService addressService;

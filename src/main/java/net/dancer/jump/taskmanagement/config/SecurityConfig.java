@@ -1,65 +1,73 @@
 package net.dancer.jump.taskmanagement.config;
+
+import com.vaadin.flow.spring.security.VaadinWebSecurity;
+import net.dancer.jump.base.ui.view.MainView;
+import net.dancer.jump.taskmanagement.ui.view.LoginView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@EnableWebSecurity
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig
+        extends VaadinWebSecurity {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll() // Public pages
-                                .anyRequest().authenticated() // All other requests require authentication
-                )
-                .formLogin(formLogin ->
-                        formLogin
-                                .loginPage("/login") // Custom login page
-                                .permitAll() // Allow access to login page
-                )
-                .logout(logout ->
-                        logout
-                                .permitAll() // Allow logout
-                );
-        http
-                .securityContext((context) -> context.requireExplicitSave(false)) // tämä joskus auttaa Vaadinin kanssa
-                .csrf(csrf -> csrf.disable()) // Vaadinilla CSRF usein hoidetaan muuten
-                .authorizeHttpRequests((auth) -> {
-                    auth.requestMatchers("/login").permitAll();
-                    auth.requestMatchers("/VAADIN/**", "/HEARTBEAT/**", "/UIDL/**", "/resources/**", "/manifest.webmanifest", "/sw.js", "/offline.html", "/icons/**", "/images/**", "/styles/**").permitAll();
-                    auth.anyRequest().authenticated();
-                });
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // Delegating the responsibility of general configurations
+        // of http security to the super class. It's configuring
+        // the followings: Vaadin's CSRF protection by ignoring
+        // framework's internal requests, default request cache,
+        // ignoring public views annotated with @AnonymousAllowed,
+        // restricting access to other views/endpoints, and enabling
+        // NavigationAccessControl authorization.
+        // You can add any possible extra configurations of your own
+        // here (the following is just an example):
 
-        return http.build();
+        // http.rememberMe().alwaysRemember(false);
+
+        // Configure your static resources with public access before calling
+        // super.configure(HttpSecurity) as it adds final anyRequest matcher
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(new AntPathRequestMatcher("/public/**"))
+                .permitAll());
+
+        super.configure(http);
+
+        // This is important to register your login view to the
+        // navigation access control mechanism:
+        setLoginView(http, "/login", "/");
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-
-        manager.createUser(User.withUsername("user")
-                .password(passwordEncoder.encode("password"))
-                .roles("USER")
-                .build());
-
-        manager.createUser(User.withUsername("admin")
-                .password(passwordEncoder.encode("admin"))
-                .roles("ADMIN")
-                .build());
-
-        return manager;
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // Customize your WebSecurity configuration.
+        super.configure(web);
     }
 
+    /**
+     * Demo UserDetailsManager which only provides two hardcoded
+     * in memory users and their roles.
+     * NOTE: This shouldn't be used in real world applications.
+     */
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public UserDetailsManager userDetailsService() {
+        UserDetails user =
+                User.withUsername("user")
+                        .password("{noop}user")
+                        .roles("USER")
+                        .build();
+        UserDetails admin =
+                User.withUsername("admin")
+                        .password("{noop}admin")
+                        .roles("ADMIN")
+                        .build();
+        return new InMemoryUserDetailsManager(user, admin);
     }
 }

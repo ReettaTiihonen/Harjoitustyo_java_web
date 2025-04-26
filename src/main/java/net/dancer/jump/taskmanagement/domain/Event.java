@@ -1,10 +1,7 @@
 package net.dancer.jump.taskmanagement.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -15,6 +12,10 @@ public class Event {
 
     private String eventName;
     private String location;
+
+    @ManyToOne
+    private Person owner;
+
 
     @ManyToMany
     private List<Participant> participants;

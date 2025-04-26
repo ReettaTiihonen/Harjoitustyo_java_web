@@ -1,9 +1,9 @@
 package net.dancer.jump.taskmanagement.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.springframework.scheduling.config.Task;
+
+import java.util.List;
 
 @Entity
 public class Person {
@@ -13,6 +13,9 @@ public class Person {
 
     private String name;
     private int age;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Event> events;
 
     public Person() {
     }

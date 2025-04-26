@@ -1,13 +1,13 @@
 package net.dancer.jump.base.domain;
 
+import com.github.javaparser.quality.Nullable;
 import jakarta.persistence.MappedSuperclass;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.util.ProxyUtils;
 
 @MappedSuperclass
 public abstract class AbstractEntity<ID> {
 
-    public abstract @Nullable ID getId();
+    public abstract ID getId();
 
     @Override
     public String toString() {
